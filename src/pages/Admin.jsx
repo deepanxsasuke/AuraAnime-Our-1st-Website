@@ -105,6 +105,7 @@ export default function Admin() {
 
         setSuccess("✅ Matching pair uploaded 🔥");
       }
+      
 
       /* 🧱 NORMAL WALLPAPERS */
       else {
@@ -136,6 +137,36 @@ export default function Admin() {
 
     setLoading(false);
   };
+/* ================= DELETE CATEGORY IMAGES ================= */
+const deleteSelectedCategoryImages = async () => {
+  if (!selectedCategories.length)
+    return alert("Select at least one category");
+
+  if (
+    !confirm(
+      `Delete ALL wallpapers from:\n${selectedCategories.join(", ")} ?`
+    )
+  )
+    return;
+
+  try {
+    const toDelete = images.filter(img =>
+      selectedCategories.includes(img.category)
+    );
+
+    for (const img of toDelete) {
+      await deleteDoc(doc(db, img._collection, img.id));
+    }
+
+    setSelectedCategories([]);
+    await fetchImages();
+
+    alert("🔥 Selected category images deleted");
+  } catch (err) {
+    console.error(err);
+    alert("Delete failed");
+  }
+};
 
   /* ================= DELETE ================= */
   const handleDelete = async (img) => {
@@ -211,6 +242,12 @@ export default function Admin() {
           {loading ? "Uploading..." : "Upload Wallpapers"}
         </button>
       </div>
+<button
+  onClick={deleteSelectedCategoryImages}
+  className="bg-red-600 hover:bg-red-700 text-white w-full py-2 rounded font-semibold"
+>
+  Delete Selected Category Images
+</button>
 
       {/* GRID */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">

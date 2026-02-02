@@ -12,11 +12,12 @@ export default function SearchBar({ query, setQuery }) {
     ease: [0.16, 1, 0.3, 1],     // 🍎 Apple-style smooth easing
     delay: 0.20                // ✨ slight cinematic delay
   }}
-  className="relative w-full max-w-3xl mx-auto"
+  className="relative w-full max-w-3xl mx-auto
+  "
 >
 
       {/* SEARCH BAR */}
-      <div className="relative flex items-center bg-[#1f232a] rounded-full h-14 px-5 shadow-lg border border-white/10">
+      <div className='relative flex items-center bg-[#1f232a] rounded-full h-14 px-5 shadow-lg border border-white/10'>
 
         {/* 🔍 SEARCH ICON */}
         <Search className="text-gray-400 w-5 h-5 mr-4" />

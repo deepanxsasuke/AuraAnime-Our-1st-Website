@@ -11,6 +11,7 @@ import { motion } from "framer-motion";
 
 const COUPLES = "Matching Lock-Screen (Couples)";
 
+
 // 🔥 CATEGORY HEADINGS
 const CATEGORY_TITLES = {
   "Matching Lock-Screen (Couples)": "👩🏻‍❤️‍👨🏻 Couples Special 🧿❤️🔐",
@@ -28,11 +29,14 @@ export default function Home() {
   const [selected, setSelected] = useState("All");
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
+  
+
 
   useEffect(() => {
     const fetchData = async () => {
       setImages([]);
       setPairs([]);
+  
 
       // 🔥 COUPLES MODE
       if (selected === COUPLES) {
@@ -84,12 +88,21 @@ export default function Home() {
       <header className="px-6 py-10 text-center">
 
 
-        <h1 className="text-4xl font-bold drop-shadow-[0_0_15px_#6366f1]">
-          Anime Wallpapers
+        <h1 className='tracking-in-expand
+        text-4xl font-bold drop-shadow-[0_0_15px_#6366f1]'>
+          Aura Anime
         </h1>
-        <p className="text-gray-400 text-sm mt-2">
-          High quality • AI Generated • Mobile & Desktop
+        <p className='focus-in-expand-fwd
+        
+        text-gray-400 text-sm mt-2
+        delay-slow
+ '
+        >
+          
+
+          High quality • AI Generated • Mobile Wallpapers
         </p>
+        
       </header>
 
       <div className="mt-8 flex justify-center px-4">
@@ -99,6 +112,30 @@ export default function Home() {
       <div className="mt-6 flex justify-center px-4">
         <CategoryBar selected={selected} setSelected={setSelected} />
       </div>
+           <motion.div
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{
+    delay: 0.5,       // ⏱️ AFTER category bar animation
+    duration: 0.8,
+    ease: "easeOut",
+  }}
+  className="mt-10 flex justify-center"
+>
+  
+  <h2
+    className="
+      neon-text
+      text-xl
+      sm:text-2xl
+      font-semibold
+      tracking-wide
+    "
+  >
+    Premium AI Anime Wallpapers
+  </h2>
+  
+</motion.div>
 
       <main className="flex-1 px-4 sm:px-6 py-10">
 {selected !== "All" && CATEGORY_TITLES[selected] && (
@@ -219,4 +256,5 @@ export default function Home() {
       <Footer />
     </div>
   );
-}
+} 
+
