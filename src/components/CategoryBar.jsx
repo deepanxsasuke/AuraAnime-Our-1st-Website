@@ -45,21 +45,25 @@ export default function CategoriesBar({ selected, setSelected }) {
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setSelected(cat)}
-            className={`
-              h-12 md:h-14
-              px-3 md:px-8
-              rounded-full
-              colourforcategories
-              text-black font-medium
-              tracking-wide
-              whitespace-nowrap
-              transition-all duration-300
-              ${
-                selected === cat
-                  ? "ring-2 ring-indigo-500/70 shadow-[0_0_35px_rgba(99,102,241,0.5)]"
-                  : ""
-              }
-            `}
+className={`
+  h-12 md:h-14
+  px-5 md:px-8
+  rounded-full
+  colourforcategories
+  text-black font-medium
+  tracking-wide
+  whitespace-nowrap
+  flex-shrink-0   /* 🔑 VERY IMPORTANT */
+
+  transition-all duration-300
+  ${
+    selected === cat
+      ? "ring-2 ring-indigo-500/70 shadow-[0_0_35px_rgba(99,102,241,0.5)]"
+      : ""
+  }
+`}
+
+
           >
             {cat}
           </motion.button>
