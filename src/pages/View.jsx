@@ -30,28 +30,23 @@ export default function View() {
     );
   }
 
-  const handleDownload = async () => {
-    try {
-      const originalUrl = state.includes("res.cloudinary.com")
-        ? state.replace(/\/upload\/.*?\//, "/upload/")
-        : state;
+  const handleDownload = () => {
+  const a = document.createElement("a");
 
-      const response = await fetch(originalUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
+  // Use original full-size Cloudinary URL
+  const originalUrl = state.includes("res.cloudinary.com")
+    ? state.replace(/\/upload\/.*?\//, "/upload/")
+    : state;
 
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "AuraAnime-Wallpaper.jpg";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
+  a.href = originalUrl;
+  a.download = "AuraAnime-Wallpaper.jpg";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 
-      setTimeout(() => navigate("/thanks"), 500);
-    } catch {
-      alert("Download failed");
-    }
+  // ✅ Navigate instantly
+  navigate("/thanks");
+
   };
 
   return (
