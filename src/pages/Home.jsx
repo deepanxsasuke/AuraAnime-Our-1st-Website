@@ -10,6 +10,17 @@ import { motion } from "framer-motion";
 
 
 const COUPLES = "Matching Lock-Screen (Couples)";
+//optimation
+const getOptimizedUrl = (url) => {
+  if (!url) return "";
+
+  return url.includes("res.cloudinary.com")
+    ? url.replace(
+        "/upload/",
+        "/upload/f_auto,q_auto,w_900/"
+      )
+    : url;
+};
 
 
 // 🔥 CATEGORY HEADINGS
@@ -212,12 +223,14 @@ export default function Home() {
                   className="grid grid-cols-2 rounded-xl overflow-hidden bg-black shadow-xl"
                 >
                   <img
-                    src={pair.left}
+                    src={getOptimizedUrl(pair.left)}
+                    loading="lazy"
                     className="aspect-[9/16] w-full object-cover cursor-pointer hover:scale-105 transition"
                     onClick={() => navigate("/view", { state: pair.left })}
                   />
                   <img
-                    src={pair.right}
+                    src={getOptimizedUrl(pair.right)}
+                    loading="lazy"
                     className="aspect-[9/16] w-full object-cover cursor-pointer hover:scale-105 transition"
                     onClick={() => navigate("/view", { state: pair.right })}
                   />
@@ -241,7 +254,9 @@ export default function Home() {
                   onClick={() => navigate("/view", { state: img.image })}
                   className="group cursor-pointer rounded-xl bg-black shadow-lg"
                 >
-                  <img src={img.image} className="w-full h-auto" />
+                  <img src={getOptimizedUrl(img.image)} 
+                  loading="lazy"
+                  className="w-full h-auto" />
                 </div>
               ))
             ) : (
