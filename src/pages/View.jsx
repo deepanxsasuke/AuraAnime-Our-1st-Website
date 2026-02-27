@@ -29,26 +29,22 @@ export default function View() {
       </div>
     );
   }
-
-  const handleDownload = () => {
-  const a = document.createElement("a");
-
-  // Use original full-size Cloudinary URL
+const handleDownload = () => {
+  // Get original full quality Cloudinary URL
   const originalUrl = state.includes("res.cloudinary.com")
     ? state.replace(/\/upload\/.*?\//, "/upload/")
     : state;
 
-  a.href = originalUrl;
-  a.download = "AuraAnime-Wallpaper.jpg";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  const link = document.createElement("a");
+  link.href = originalUrl;
+  link.setAttribute("download", "AuraAnime-Wallpaper.jpg");
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 
-  // ✅ Navigate instantly
+  // 🔥 Instant thanks page
   navigate("/thanks");
-
-  };
-
+};
   return (
     <div className="bg-black min-h-screen text-white flex items-center justify-center px-4">
       <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
