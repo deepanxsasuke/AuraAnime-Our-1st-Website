@@ -30,20 +30,18 @@ export default function View() {
     );
   }
 const handleDownload = () => {
-  // Get original full quality Cloudinary URL
-  const originalUrl = state.includes("res.cloudinary.com")
-    ? state.replace(/\/upload\/.*?\//, "/upload/")
+  // Force download using Cloudinary fl_attachment
+  const downloadUrl = state.includes("res.cloudinary.com")
+    ? state.replace("/upload/", "/upload/fl_attachment/")
     : state;
 
-  const link = document.createElement("a");
-  link.href = originalUrl;
-  link.setAttribute("download", "AuraAnime-Wallpaper.jpg");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  // Trigger download
+  window.open(downloadUrl, "_self");
 
-  // 🔥 Instant thanks page
-  navigate("/thanks");
+  // Go to thanks page immediately
+  setTimeout(() => {
+    navigate("/thanks");
+  }, 300);
 };
   return (
     <div className="bg-black min-h-screen text-white flex items-center justify-center px-4">
