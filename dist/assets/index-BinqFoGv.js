@@ -55,17 +55,13 @@ This typically indicates that your device does not have a healthy Internet conne
           md:justify-center\r
         `,children:ZU.map(n=>q.jsx(Es.button,{variants:{hidden:{opacity:0,y:25,scale:.9},visible:{opacity:1,y:0,scale:1,transition:{duration:.6,ease:"easeOut"}}},whileHover:{scale:1.08},whileTap:{scale:.95},onClick:()=>t(n),className:`
   h-12 md:h-14
-  px-3 md:px-8
+  px-5 md:px-8
   rounded-full
   colourforcategories
   text-black font-medium
   tracking-wide
-
-  /* 🔑 MOBILE FIX */
-  w-full
-  overflow-hidden
-  text-ellipsis
   whitespace-nowrap
+  flex-shrink-0   /* 🔑 VERY IMPORTANT */
 
   transition-all duration-300
   ${e===n?"ring-2 ring-indigo-500/70 shadow-[0_0_35px_rgba(99,102,241,0.5)]":""}

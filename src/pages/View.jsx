@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 const getOptimizedUrl = (url) => {
   if (!url) return "";
@@ -25,7 +26,7 @@ export default function View() {
   }
 
   const optimizedUrl = getOptimizedUrl(state);
-
+  const [loaded, setLoaded] = useState(false);
   const handleDownload = async () => {
     try {
       // ⚠️ Download FULL quality version (not resized one)
@@ -58,29 +59,29 @@ export default function View() {
 
         {/* 🖼️ IMAGE */}
         <motion.img
-          src={optimizedUrl}
-          alt="Wallpaper"
-          loading="lazy"
-          drag="x"
-          dragConstraints={{ left: 0, right: 120 }}
-          dragElastic={0.2}
-          onDragEnd={(event, info) => {
-            if (info.offset.x > 100) {
-              navigate(-1);
-            }
-          }}
-          initial={{ opacity: 0, x: -60 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-          className="
-            w-full
-            max-h-[85vh]
-            object-contain
-            rounded-2xl
-            shadow-2xl
-            cursor-grab active:cursor-grabbing
-          "
-        />
+  src={optimizedUrl}
+  alt="Wallpaper"
+  onLoad={() => setLoaded(true)}
+  drag="x"
+  dragConstraints={{ left: 0, right: 120 }}
+  dragElastic={0.2}
+  onDragEnd={(event, info) => {
+    if (info.offset.x > 100) {
+      navigate(-1);
+    }
+  }}
+  initial={{ opacity: 0 }}
+  animate={{ opacity: loaded ? 1 : 0 }}
+  transition={{ duration: 0.4 }}
+  className="
+    w-full
+    max-h-[85vh]
+    object-contain
+    rounded-2xl
+    shadow-2xl
+    cursor-grab active:cursor-grabbing
+  "
+/>
 
         {/* 🔥 BUTTONS */}
         <div className="flex flex-col gap-6 items-center md:items-start">
@@ -101,6 +102,7 @@ export default function View() {
               transition
               hover:scale-105
               shadow-[0_0_35px_rgba(99,102,241,0.7)]
+              download
             "
           >
             ❤️‍🔥 Download 📌
@@ -123,6 +125,7 @@ export default function View() {
               hover:scale-105
               shadow-[0_0_30px_rgba(255,255,255,0.25)]
               border border-white/20
+              download
             "
           >
             ← Back Button ←
