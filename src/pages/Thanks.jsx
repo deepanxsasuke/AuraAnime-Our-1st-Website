@@ -1,66 +1,113 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function Thanks() {
   const navigate = useNavigate();
-  const [showAd, setShowAd] = useState(false);
+  const canvasRef = useRef(null);
 
+  // Lightweight floating particles
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowAd(true);
-    }, 1500); // smooth delay
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    let animId;
+    const particles = [];
+    const COUNT = 18;
 
-    return () => clearTimeout(timer);
+    const resize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    for (let i = 0; i < COUNT; i++) {
+      particles.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 2 + 1,
+        dx: (Math.random() - 0.5) * 0.3,
+        dy: -(Math.random() * 0.4 + 0.1),
+        o: Math.random() * 0.4 + 0.1,
+      });
+    }
+
+    const draw = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((p) => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(139,92,246,${p.o})`;
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.y < -10) {
+          p.y = canvas.height + 10;
+          p.x = Math.random() * canvas.width;
+        }
+        if (p.x < -10 || p.x > canvas.width + 10) {
+          p.x = Math.random() * canvas.width;
+        }
+      });
+      animId = requestAnimationFrame(draw);
+    };
+    draw();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener("resize", resize);
+    };
   }, []);
 
   return (
-    <div className="bg-black min-h-screen flex flex-col items-center justify-center text-white px-6 text-center">
+    <div className="thanks-page">
+      {/* Floating particles canvas */}
+      <canvas ref={canvasRef} className="thanks-particles" />
 
-      {/* 🎉 TITLE */}
-      <h1 className="text-3xl sm:text-4xl font-bold mb-3 animate-fadeIn">
-        🎉 Thanks for downloading!
-      </h1>
+      {/* Content */}
+      <div className="thanks-content">
+        <h1 className="thanks-title thanks-fadein">
+          🎉 Thanks for downloading!
+        </h1>
 
-      {/* SUBTEXT */}
-      <p className="text-gray-400 mb-6 animate-fadeInDelay">
-        Your wallpaper has been saved to your gallery.
-      </p>
+        <p className="thanks-subtitle thanks-fadein thanks-delay-1">
+          Your wallpaper has been saved to your gallery.
+        </p>
 
-      {/* LOADING */}
-      {!showAd && (
-        <div className="flex flex-col items-center mb-6">
-          <div className="w-8 h-8 border-4 border-green-500 border-t-transparent rounded-full animate-spin mb-2"></div>
-          <span className="text-gray-500 text-sm">
-            Preparing something cool for you...
-          </span>
+        <p className="thanks-small thanks-fadein thanks-delay-2">
+          Get more AI anime wallpapers ❤️
+        </p>
+
+        {/* Buttons */}
+        <div className="thanks-buttons thanks-fadein thanks-delay-3">
+          <button
+            onClick={() => {
+              window.open("https://linkpays.in/NsgObSTM", "_blank");
+              setTimeout(() => navigate("/"), 300);
+            }}
+            className="thanks-btn-continue"
+          >
+            ✨ Continue
+          </button>
+
+          <button
+            onClick={() => {
+              window.open("https://shrinkme.click/sB6JQks", "_blank");
+              setTimeout(() => navigate("/"), 300);
+            }}
+            className="thanks-btn-outline"
+          >
+            🖼 More HD Wallpapers
+          </button>
+
+          <button
+            onClick={() => navigate("/")}
+            className="thanks-btn-back"
+          >
+            ⬅ Back to Home
+          </button>
         </div>
-      )}
-
-      {/* ADSENSE SLOT */}
-      {showAd && (
-        <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-lg p-4 mb-6 animate-slideUp">
-          <ins className="adsbygoogle"
-            style={{ display: "block" }}
-            data-ad-client="ca-pub-XXXXXXXXXXXX"
-            data-ad-slot="1234567890"
-            data-ad-format="auto"
-            data-full-width-responsive="true">
-          </ins>
-
-          <script>
-            {`(adsbygoogle = window.adsbygoogle || []).push({});`}
-          </script>
-        </div>
-      )}
-
-      {/* BUTTON */}
-      <button
-        onClick={() => navigate("/")}
-        className="bg-gray-700 px-6 py-2 rounded hover:bg-gray-600 transition"
-      >
-        🔙 Back to Home
-      </button>
-
+      </div>
     </div>
   );
 }
