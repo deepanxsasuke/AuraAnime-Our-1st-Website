@@ -39,6 +39,7 @@ export default function Home() {
   const [pairs, setPairs] = useState([]);
   const [selected, setSelected] = useState("All");
   const [search, setSearch] = useState("");
+  const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
   
 
@@ -86,12 +87,19 @@ export default function Home() {
     };
 
     fetchData();
+    setShowAll(false); // reset when category changes
   }, [selected]);
 
   const filteredImages = images.filter(img =>
     img.title?.toLowerCase().includes(search.toLowerCase()) ||
     img.category?.toLowerCase().includes(search.toLowerCase())
   );
+
+  const LIMIT = 20;
+  const isAllCategory = selected === "All";
+  const displayedImages = isAllCategory && !showAll
+    ? filteredImages.slice(0, LIMIT)
+    : filteredImages;
 
   return (
     <div className="bg-[#0b0f19] min-h-screen text-white flex flex-col">
@@ -246,25 +254,93 @@ export default function Home() {
 
         {/* 🧱 NORMAL GRID */}
         {selected !== COUPLES && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredImages.length > 0 ? (
-              filteredImages.map((img, i) => (
-                <div
-                  key={i}
-                  onClick={() => navigate("/view", { state: img.image })}
-                  className="group cursor-pointer rounded-xl bg-black shadow-lg"
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {displayedImages.length > 0 ? (
+                displayedImages.map((img, i) => (
+                  <div
+                    key={i}
+                    onClick={() => navigate("/view", { state: img.image })}
+                    className="group cursor-pointer rounded-xl bg-black shadow-lg"
+                  >
+                    <img src={getOptimizedUrl(img.image)}
+                      loading="lazy"
+                      className="w-full h-auto" />
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-400 col-span-full text-center">
+                  𝐍𝐨𝐰 𝐥𝐨𝐚𝐝𝐢𝐧𝐠 ‪‪❤︎‬. .
+                </p>
+              )}
+            </div>
+
+            {/* Show "View All" button only on All category when more than 20 exist */}
+            {isAllCategory && !showAll && filteredImages.length > LIMIT && (
+              <div className="flex flex-col items-center gap-4 mt-12 mb-6">
+
+                {/* Glowing divider */}
+                <div style={{
+                  width: "120px",
+                  height: "1px",
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent)",
+                  boxShadow: "0 0 10px rgba(255,255,255,0.4)",
+                }} />
+
+                <p className="text-xs tracking-[0.3em] uppercase text-white/40 font-medium">
+                  More wallpapers await
+                </p>
+
+                {/* Premium Pill Button */}
+                <style>{`
+                  @keyframes shimmer-text {
+                    0% { background-position: -200% center; }
+                    100% { background-position: 200% center; }
+                  }
+                  @keyframes neon-pulse {
+                    0%, 100% { box-shadow: 0 0 18px rgba(255,255,255,0.3), 0 0 40px rgba(255,255,255,0.1), inset 0 1px 0 rgba(255,255,255,0.25); }
+                    50% { box-shadow: 0 0 28px rgba(255,255,255,0.55), 0 0 60px rgba(255,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.35); }
+                  }
+                  .btn-neon span {
+                    background: linear-gradient(90deg, #999 0%, #fff 30%, #ddd 50%, #fff 70%, #999 100%);
+                    background-size: 200% auto;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    animation: shimmer-text 3s linear infinite;
+                  }
+                  .btn-neon {
+                    animation: neon-pulse 3s ease-in-out infinite;
+                  }
+                  .btn-neon:hover {
+                    animation: none;
+                    box-shadow: 0 0 40px rgba(255,255,255,0.6), 0 0 90px rgba(255,255,255,0.2), inset 0 1px 0 rgba(255,255,255,0.5) !important;
+                    border-color: rgba(255,255,255,0.7) !important;
+                  }
+                `}</style>
+
+                <button
+                  onClick={() => setShowAll(true)}
+                  className="btn-neon px-12 py-3.5 rounded-full text-sm font-bold tracking-[0.25em] uppercase transition-all duration-300 hover:scale-105"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.03) 100%)",
+                    backdropFilter: "blur(24px)",
+                    WebkitBackdropFilter: "blur(24px)",
+                    border: "1px solid rgba(255,255,255,0.35)",
+                  }}
                 >
-                  <img src={getOptimizedUrl(img.image)} 
-                  loading="lazy"
-                  className="w-full h-auto" />
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-400 col-span-full text-center">
-                𝐍𝐨𝐰 𝐥𝐨𝐚𝐝𝐢𝐧𝐠 ‪‪❤︎‬. .
-              </p>
+                  <span>✦ View All Wallpapers</span>
+                </button>
+
+                {/* Bottom glowing divider */}
+                <div style={{
+                  width: "80px",
+                  height: "1px",
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)",
+                }} />
+              </div>
             )}
-          </div>
+          </>
         )}
       </main>
 
