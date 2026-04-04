@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import SEOContent from "../components/SEOContent";
 
 const getOptimizedUrl = (url) => {
   if (!url) return "";
@@ -16,6 +17,18 @@ export default function View() {
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
+    // Robustly force the browser to scroll to top after a tiny delay
+    // This overrides any default scroll restoration by React Router
+    const scrollToTop = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    };
+    
+    scrollToTop();
+    setTimeout(scrollToTop, 10);
+    setTimeout(scrollToTop, 50);
+
     const img = new Image();
     img.src = optimizedUrl;
     img.onload = () => setLoaded(true);
@@ -40,7 +53,7 @@ export default function View() {
   };
 
   return (
-    <div className="bg-black min-h-screen text-white flex items-center justify-center px-4 py-8">
+    <div className="bg-black min-h-screen text-white flex flex-col items-center pt-8 md:pt-16 px-0 w-full overflow-x-hidden">
 
       <style>{`
         @keyframes shimmer-btn {
@@ -68,41 +81,44 @@ export default function View() {
         }
       `}</style>
 
-      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+      {/* Main Wallpaper Area */}
+      <div className="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center justify-items-center mb-32 mt-4 md:mt-8 px-4">
 
         {/* 🖼️ IMAGE */}
-        <motion.img
-          src={optimizedUrl}
-          alt="Wallpaper"
-          drag="x"
-          dragConstraints={{ left: 0, right: 120 }}
-          dragElastic={0.2}
-          onDragEnd={(event, info) => {
-            if (info.offset.x > 100) navigate(-1);
-          }}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl cursor-grab active:cursor-grabbing"
-        />
+        <div className="relative p-2 rounded-3xl bg-gradient-to-b from-white/10 to-transparent shadow-[0_0_50px_rgba(255,255,255,0.05)] w-full max-w-sm md:max-w-md">
+          <motion.img
+            src={optimizedUrl}
+            alt="Wallpaper"
+            drag="x"
+            dragConstraints={{ left: 0, right: 120 }}
+            dragElastic={0.2}
+            onDragEnd={(event, info) => {
+              if (info.offset.x > 100) navigate(-1);
+            }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="w-full max-h-[70vh] object-contain rounded-2xl shadow-2xl cursor-grab active:cursor-grabbing bg-black block"
+          />
+        </div>
+        <br />
 
         {/* 🔥 BUTTONS */}
-        <div className="flex flex-col gap-16 w-full items-center px-2 md:px-0">
+        <div className="flex flex-col gap-4 w-full items-center px-4 max-w-[380px] mt-6 md:mt-0">
           <motion.button
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.6 }}
             onClick={handleDownload}
-            className="view-btn py-2.5 px-8 text-sm font-bold uppercase rounded-full transition-all duration-300 hover:scale-[1.04]"
+            className="view-btn py-[0.85rem] px-10 text-sm font-bold uppercase rounded-full transition-all duration-300 hover:scale-[1.04] w-full"
             style={{
               background: "rgba(255,255,255,0.06)",
               backdropFilter: "blur(28px)",
               WebkitBackdropFilter: "blur(28px)",
               border: "1px solid rgba(255,255,255,0.3)",
-              minWidth: "160px",
             }}
           >
-            <span>❤️‍🔥 Download</span>
+            <span>✨ Download</span>
           </motion.button>
 
           <motion.button
@@ -110,13 +126,12 @@ export default function View() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
             onClick={() => navigate(-1)}
-            className="view-btn py-2.5 px-8 text-sm font-bold uppercase rounded-full transition-all duration-300 hover:scale-[1.04]"
+            className="view-btn py-[0.85rem] px-10 text-sm font-bold uppercase rounded-full transition-all duration-300 hover:scale-[1.04] w-full"
             style={{
               background: "rgba(255,255,255,0.04)",
               backdropFilter: "blur(28px)",
               WebkitBackdropFilter: "blur(28px)",
               border: "1px solid rgba(255,255,255,0.25)",
-              minWidth: "160px",
             }}
           >
             <span>← Back</span>
@@ -124,6 +139,14 @@ export default function View() {
         </div>
 
       </div>
+      <br />
+      <br/>
+
+      {/* SEO Blog Content Area */}
+      <div className="w-full bg-[#0a0c10] border-t border-white/5 pt-24 pb-16">
+        <SEOContent />
+      </div>
+
     </div>
   );
 }

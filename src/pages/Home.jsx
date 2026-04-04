@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import CategoryBar from "../components/CategoryBar";
 import SearchBar from "../components/SearchBar";
 import { motion } from "framer-motion";
+import HomeSEOContent from "../components/HomeSEOContent";
 
 
 const COUPLES = "Matching Lock-Screen (Couples)";
@@ -344,6 +345,7 @@ export default function Home() {
         )}
       </main>
 
+      <HomeSEOContent />
       <Footer />
     </div>
   );

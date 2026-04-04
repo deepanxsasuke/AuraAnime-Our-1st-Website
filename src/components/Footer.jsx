@@ -13,22 +13,20 @@ export default function Footer() {
         </p>
 
         {/* LINKS */}
-        <div className="px-6 py-10 border-b border-white/10 text-center">
-          <a href="/privacy-policy" className="text-4xl font-bold drop-shadow-[0_0_15px_#6366f1]">
-          
-        
+        <div className="px-6 py-10 border-b border-white/10 text-center text-gray-400">
+          <a href="/privacy-policy" className="text-white text-base font-bold drop-shadow-[0_0_8px_#6366f1] hover:drop-shadow-[0_0_18px_#8b5cf6] transition-all">
             Privacy Policy
           </a>
           &nbsp;|&nbsp;
-          <a href="/dmca" className="text-4xl font-bold drop-shadow-[0_0_15px_#6366f1]">
+          <a href="/dmca" className="text-white text-base font-bold drop-shadow-[0_0_8px_#6366f1] hover:drop-shadow-[0_0_18px_#8b5cf6] transition-all">
             DMCA
           </a>
           &nbsp;|&nbsp;
-          <a href="/terms" className="text-4xl font-bold drop-shadow-[0_0_15px_#6366f1]">
+          <a href="/terms" className="text-white text-base font-bold drop-shadow-[0_0_8px_#6366f1] hover:drop-shadow-[0_0_18px_#8b5cf6] transition-all">
             Terms
           </a>
           &nbsp;|&nbsp;
-          <a href="/contact" className="text-4xl font-bold drop-shadow-[0_0_15px_#6366f1]">
+          <a href="/contact" className="text-white text-base font-bold drop-shadow-[0_0_8px_#6366f1] hover:drop-shadow-[0_0_18px_#8b5cf6] transition-all">
             Contact
           </a>
         </div>
