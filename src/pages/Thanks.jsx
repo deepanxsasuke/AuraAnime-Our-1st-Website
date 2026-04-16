@@ -1,9 +1,11 @@
 import { useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function Thanks() {
   const navigate = useNavigate();
+  const { state } = useLocation();
   const canvasRef = useRef(null);
+  const fromCategory = state?.category ?? null;
 
   // Lightweight floating particles
   useEffect(() => {
@@ -81,23 +83,17 @@ export default function Thanks() {
         {/* Buttons */}
         <div className="thanks-buttons thanks-fadein thanks-delay-3">
           <button
-            onClick={() => {
-              window.open("https://linkpays.in/NsgObSTM", "_blank");
-              setTimeout(() => navigate("/"), 300);
-            }}
+            onClick={() => navigate("/", { state: { restoreCategory: fromCategory } })}
             className="thanks-btn-continue"
           >
             ✨ Continue
           </button>
 
           <button
-            onClick={() => {
-              window.open("https://shrinkme.click/sB6JQks", "_blank");
-              setTimeout(() => navigate("/"), 300);
-            }}
+            onClick={() => navigate("/")}
             className="thanks-btn-outline"
           >
-            🖼 More HD Wallpapers
+            🖼 More Wallpapers
           </button>
 
           <button

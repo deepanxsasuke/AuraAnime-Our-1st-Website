@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../services/firebase";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 import Footer from "../components/Footer";
 import CategoryBar from "../components/CategoryBar";
@@ -42,7 +42,14 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [showAll, setShowAll] = useState(false);
   const navigate = useNavigate();
-  
+  const location = useLocation();
+
+  // Restore category when user navigates back from View/Thanks
+  useEffect(() => {
+    if (location.state?.restoreCategory) {
+      setSelected(location.state.restoreCategory);
+    }
+  }, []);
 
 
   useEffect(() => {
@@ -235,13 +242,13 @@ export default function Home() {
                     src={getOptimizedUrl(pair.left)}
                     loading="lazy"
                     className="aspect-[9/16] w-full object-cover cursor-pointer hover:scale-105 transition"
-                    onClick={() => navigate("/view", { state: pair.left })}
+                    onClick={() => navigate("/view", { state: { image: pair.left, category: selected } })}
                   />
                   <img
                     src={getOptimizedUrl(pair.right)}
                     loading="lazy"
                     className="aspect-[9/16] w-full object-cover cursor-pointer hover:scale-105 transition"
-                    onClick={() => navigate("/view", { state: pair.right })}
+                    onClick={() => navigate("/view", { state: { image: pair.right, category: selected } })}
                   />
                 </div>
               ))
@@ -261,7 +268,7 @@ export default function Home() {
                 displayedImages.map((img, i) => (
                   <div
                     key={i}
-                    onClick={() => navigate("/view", { state: img.image })}
+                    onClick={() => navigate("/view", { state: { image: img.image, category: selected } })}
                     className="group cursor-pointer rounded-xl bg-black shadow-lg"
                   >
                     <img src={getOptimizedUrl(img.image)}

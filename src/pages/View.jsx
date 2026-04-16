@@ -13,7 +13,10 @@ const getOptimizedUrl = (url) => {
 export default function View() {
   const { state } = useLocation();
   const navigate = useNavigate();
-  const optimizedUrl = getOptimizedUrl(state);
+  // Support both old (string) and new ({ image, category }) state shapes
+  const imageUrl = typeof state === "string" ? state : state?.image;
+  const fromCategory = typeof state === "object" && state !== null ? state?.category : null;
+  const optimizedUrl = getOptimizedUrl(imageUrl);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -34,7 +37,7 @@ export default function View() {
     img.onload = () => setLoaded(true);
   }, [optimizedUrl]);
 
-  if (!state) {
+  if (!imageUrl) {
     return (
       <div className="bg-black text-white min-h-screen flex items-center justify-center">
         No image found
@@ -43,12 +46,12 @@ export default function View() {
   }
 
   const handleDownload = () => {
-    const downloadUrl = state.includes("res.cloudinary.com")
-      ? state.replace("/upload/", "/upload/fl_attachment/")
-      : state;
+    const downloadUrl = imageUrl.includes("res.cloudinary.com")
+      ? imageUrl.replace("/upload/", "/upload/fl_attachment/")
+      : imageUrl;
     window.open(downloadUrl, "_self");
     setTimeout(() => {
-      navigate("/thanks");
+      navigate("/thanks", { state: { from: imageUrl, category: fromCategory } });
     }, 300);
   };
 
@@ -93,7 +96,11 @@ export default function View() {
             dragConstraints={{ left: 0, right: 120 }}
             dragElastic={0.2}
             onDragEnd={(event, info) => {
-              if (info.offset.x > 100) navigate(-1);
+              if (info.offset.x > 100) {
+                fromCategory
+                  ? navigate("/", { state: { restoreCategory: fromCategory } })
+                  : navigate(-1);
+              }
             }}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -125,7 +132,11 @@ export default function View() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.6, duration: 0.6 }}
-            onClick={() => navigate(-1)}
+            onClick={() =>
+              fromCategory
+                ? navigate("/", { state: { restoreCategory: fromCategory } })
+                : navigate(-1)
+            }
             className="view-btn py-[0.85rem] px-10 text-sm font-bold uppercase rounded-full transition-all duration-300 hover:scale-[1.04] w-full"
             style={{
               background: "rgba(255,255,255,0.04)",
